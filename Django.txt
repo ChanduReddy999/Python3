@@ -1,0 +1,82 @@
+py --version			python --version
+pip install django
+py -m django --version		python -m django --version
+
+Create a django folder in your desktop:
+	open cmd with folder path
+To create a project to work with django:
+	python -m django startproject project_name
+Enter into project folder:
+	cd project_name
+To create an application/app:
+	python manage.py startapp app_name
+To work with html files in django create a folder as:
+	mkdir templates
+To work with css/images/js files in django create a folder as:
+	mkdir static		(here create sub-folder for each css/images/js files)
+To open IDE (vscode):
+	code .
+
+
+In vscode open projectfolder and open (settings.py) and (import os) and also in the (installed-apps) list add (app_name) and go to (templates) list and add ('DIRS': [os.path.join(BASE_DIR,"templates")],) and go to end of settings.py file where a static line will be written there create a constant static list as (STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]) 
+
+In vscode open templates folder and create a html file(home.html)
+In vscode open static folder and create a css file(home.css)
+
+In vscode open app_name folder and open (views.py) and write to import: from django.http import HttpResponse and create your own function to display:
+		from django.shortcuts import render
+		from django.http import HttpResponse
+		# Create your views here.
+		def display(request):
+    			return render(request,'home.html')
+
+In vscode open projectfolder and open (urls.py) and create a path for this to import the links
+		from app_name import views
+	In (urlspattern) list
+		path('link',views.display)
+
+
+Now write html content in home.html and styling content in home.css and so on...
+
+In the first line of home.html add: {% load static %}     : to work with static files(we use django-static related keywords like {% path here related to static files %} in the html file)
+
+
+
+Now to work with models(databases): open app1 and open models.py:
+	class student(models.Model):
+	firstname=models.CharField(max_length=1000)
+	lastname=models.CharField(max_length=1000)
+	email=models.EmailField(max_length=1000)
+	mobile_number=models.BigIntegerField()
+	location=models.CharField(max_length=1000)
+	pincode=models.IntegerField()
+Now open views.py in app1 and import the table and write a method to work with table data:
+	from app1.models import student
+	def displaydata(request):
+	mydata=student.objects.all()
+	result={'myresult':mydata}
+	return render(request,'data.html',result)
+Now open urls.py in project folder and make a path in urlpattern:
+	path('pathname/',views.displaydata),
+Now make migrations in cmd as follows:
+	python manage.py makemigrations
+	python manage.py migrate
+	python manage.py sqlmigrate app1 0001
+	python manage.py shell
+	--> from django.db import connection
+	--> cur=connection.cursor()
+	--> cur.execute('select * from app1_student')
+	--> result=cur.fetchall()
+	--> print(result)
+	--> cur.execute("insert into app1_student values(1,'chandu','reddy','chandu@gmail.com',9087654321,'hyderabad',500038)")
+	--> cur.execute('select * from app1_student')
+	--> result=cur.fetchall()
+	--> print(result)
+	--> cur.execute("insert into app1_student values(2,'jaanaki','reddy','jaanu@gmail.com',9087651432,'warangal',500143)")
+	--> cur.execute('select * from app1_student')
+	--> result=cur.fetchall()
+	--> print(result)
+	--> exit()
+Now your shell will be closed and now run server to check the table contains all the inserted data in the webpage table:
+	python manage.py runserver
+
